@@ -56,6 +56,24 @@ def login():
         else:
             return u'邮箱或者密码错误，请确认后重新登录'
 
+@app.route('/logout/')
+def logout():
+    #删除session中的user_id来实现注销
+    #session.pop('user_id')
+    session.clear()
+    return redirect(url_for('login'))
+
+@app.context_processor
+def my_context_processor():
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.filter(User.user_id == user_id).first()
+        if user:
+            return {'user':user}
+    return {}
+
+
+
 # @app.route('/login', methods=['POST'])
 # def login_operate():
 #     """邮箱登录验证功能"""
