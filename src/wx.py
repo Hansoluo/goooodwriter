@@ -72,9 +72,9 @@ def reply_text(xml_recv):
 
     return xlm_reply
 
-def regist_wx(fromUserName):
-    """注册邮箱、密码为空的用户"""
-    user = User(,,,fromUserName)
-    db.session.add(user)
-    db.session.commit
-    return user
+# def regist_wx(fromUserName):
+#     """注册邮箱、密码为空的用户"""
+#     user = User(,,,fromUserName)
+#     db.session.add(user)
+#     db.session.commit
+#     return user

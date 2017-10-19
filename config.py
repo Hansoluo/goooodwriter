@@ -6,9 +6,9 @@ SECRET_KEY = os.urandom(24)
 
 DIALECT = 'mysql'
 DRIVER = 'pymysql'
-USERNAME = 'root'
-PASSWORD = 'hjy'
-HOST = '127.0.0.1'
+USERNAME = 'goodwriter'
+PASSWORD = '11111111'
+HOST = '192.168.9.102'
 PORT = '3306'
 DATABASE = 'goodwriter'
 DB_URI = '{}+{}://{}:{}@{}:{}/{}?charset=utf8'.format(DIALECT,DRIVER,USERNAME,PASSWORD,HOST,PORT,DATABASE)
