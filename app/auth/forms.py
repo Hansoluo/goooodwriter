@@ -21,3 +21,7 @@ class RegistrationForm(FlaskForm):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email already registered.')
+
+    def validate_wechatid(self, field):
+        if User.query.filter_by(wechatid=field.data).first():
+            raise ValidationError('Wechatid already have.')

@@ -10,25 +10,25 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     wechatid = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    #confirmed = db.Column(db.Boolean, default=False)
+    confirmed = db.Column(db.Boolean, default=False)
 
-    # #生成一个令牌，有效期默认为一小时
-    # def generate_confirmation_token(self, expiration=3600):
-    #     s = Serializer(current_app.config['SECRET_KEY'], expiration)
-    #     return s.dumps({'confirm': self.id})
-    #
-    # #检验令牌，验证通过，设置confirmed属性为True
-    # def confirm(self, token):
-    #     s = Serializer(current_app.config['SECRET_KEY'])
-    #     try:
-    #         data = s.loads(token)
-    #     except:
-    #         return False
-    #     if data.get('confirm') != self.id:
-    #         return False
-    #     self.confirmed = True
-    #     db.session.add(self)
-    #     return True
+    #生成一个令牌，有效期默认为一小时
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': self.id})
+
+    #检验令牌，验证通过，设置confirmed属性为True
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
 
     @property
     def password(self):
