@@ -8,7 +8,7 @@ DIALECT = 'mysql'
 DRIVER = 'pymysql'
 USERNAME = 'goodwriter'
 PASSWORD = '11111111'
-HOST = '192.168.9.102'
+HOST = '101.132.133.202'
 PORT = '3306'
 DATABASE = 'goodwriter'
 DB_URI = '{}+{}://{}:{}@{}:{}/{}?charset=utf8'.format(DIALECT,DRIVER,USERNAME,PASSWORD,HOST,PORT,DATABASE)
