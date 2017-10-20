@@ -33,27 +33,22 @@
                     <form class="form-inline">
                         <div class="btn-group-vertical" role="group">
                             <button class="btn btn-link btn-lg"><span class="glyphicon glyphicon-paperclip" aria-hidden="true">标签</span></button>
-                            <button type="button" class="btn btn-link btn-lg">电影</button>
-                            <hr>
-                            <button type="button" class="btn btn-link btn-lg">音乐</button>
-                            <hr>
-                            <button type="button" class="btn btn-link btn-lg">python</button>
-                            <hr>
-                            <button type="button" class="btn btn-link btn-lg">感悟</button>
-                            <hr>
+                            {% for tag in tags %}
+                            <a href="{{url_for('material_list',tag=tag.tag)}}">{{tag.tag}}</a>
+
+                            {%endfor%}
                         </div>
                     </form>
                 </div>
             </div>
             <div class="col-sm-9">
                 <div class="list-group">
-                    <a href="#" class="list-group-item active">
-                      {% for item in items %}
-                        <h5 class="list-group-item-heading"><a href="{{ item[0] }}">{{item[1]}}</a></h5>
-                        <!-- <p class="list-group-item-text">Lorem ipsum dolor sit amet,consectetur adipiscing elit. Aenean</p> -->
-                        <hr>
-                      {% endfor %}
+                  {% for material in materials %}
+                    <a href="{{url_for('material_edit', mater_id=material.mater_id) }}" class="list-group-item active">
+                        <h5 class="list-group-item-heading">{{material.tag}}</h5>
+                        <p class="list-group-item-text">{{material.content}}</p>
                     </a>
+                  {% endfor %}
                 </div>
             </div>
         </div>

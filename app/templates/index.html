@@ -32,9 +32,12 @@
               {% if user %}
                 <h4><a href="#">欢迎{{ user.email }}</a></h4>
                 <h4><a href="{{ url_for('logout') }}">注销</a></h4>
+                <hr/>
                 <h4><a href="{{ url_for('article_edit') }}">写文章</a></h4>
+                <h4><a href="{{ url_for('article_list') }}">查文章</a></h4>
+                <hr/>
                 <h4><a href="{{ url_for('material_edit') }}">写素材</a></h4>
-
+                <h4><a href="{{ url_for('material_list') }}">查素材</a></h4>
               {% else %}
                 <h4><a href="{{ url_for('login') }}">登录</a></h4>
                 <h4><a href="{{ url_for('regist') }}">注册</a></h4>

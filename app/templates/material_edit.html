@@ -28,14 +28,10 @@
                         <div >
                             <button class="btn btn-link btn-lg"><span class="glyphicon glyphicon-paperclip" aria-hidden="true">标签</span></button>
                               <br/>
-                            <button type="button" class="btn btn-link btn-lg">电影</button>
+                              {% for tag in tags %}
+                              <a href="{{url_for('material_list',tag=tag.tag)}}">{{tag.tag}}</a>
 
-                            <button type="button" class="btn btn-link btn-lg">音乐</button>
-
-                            <button type="button" class="btn btn-link btn-lg">python</button>
-
-                            <button type="button" class="btn btn-link btn-lg">感悟</button>
-
+                              {%endfor%}
                         </div>
                     </form>
 
@@ -45,14 +41,25 @@
                 </div>
             </div>
             <div class="col-sm-9">
-              <form action="" method="POST">
-              <h3>标签</h3>
-              <input type="text" class="form-control" placeholder="标签" name="tag">
-              <h3>内容</h3>
-              <input type="text" class="form-control" placeholder="内容" name="context">
 
+            <form action="" method="POST">
+              {% if material is defined %}
+              <input name="mater_id" type="hidden" value="{{material.mater_id}}" />
+              <h3>标签</h3>
+              <input type="text" class="form-control" placeholder="标签" name="tag" value="{{material.tag}}"/>
+              <h3>内容</h3>
+              <textarea  class="form-control" placeholder="内容" name="content" >{{material.content}}</textarea>
+              <h4>更新时间：{{material.edit_time}}</h4>
+              {% else %}
+              <input name="mater_id" type="hidden" value="" />
+              <h3>标签</h3>
+              <input type="text" class="form-control" placeholder="标签" name="tag" value=""/>
+              <h3>内容</h3>
+              <textarea  class="form-control" placeholder="内容" name="content" ></textarea>
+              {% endif %}
+            <br/>
               <button class="btn btn-primary" type="submit">提交</button>
-            </form>
+            </form >
             </div>
         </div>
 </body>

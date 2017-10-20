@@ -1,11 +1,11 @@
 from flask import Flask,render_template,redirect,url_for,session,request
 import xml.etree.ElementTree as ET
 import config
-from models import User
+from models import User,Material,Article
 from app import db
 from app import app
 from src.wx import valication, reply_text
-import time
+from datetime import datetime
 
 @app.route('/')
 def index():
@@ -66,31 +66,100 @@ def logout():
 @app.route('/material_edit', methods=['GET','POST'])
 def material_edit():
     if request.method == 'GET':
-        return render_template('material_edit.html')
+        mater_id = request.args.get('mater_id')
+        if mater_id:
+            # return session['user_id']
+            material = Material.query.filter(Material.mater_id==int(mater_id),Material.user_id==session['user_id']).first()
+            # return str(Material.query.filter(Material.mater_id==mater_id,Material.user_id==session['user_id']))
+            return render_template('material_edit.html', material=material)
+        else:
+            return render_template('material_edit.html')
     else:
-        title = request.form['title']
+        mater_id = request.form['mater_id']
+        tag = request.form['tag']
         content = request.form['content']
-        edit_time = time.time()
-        user_id = user.user_id
-        article = Article(title=email,content=content,user_id=user_id,edit_time=edit_time)
-        db.session.add(article)
-        db.session.commit()
-        return redirect(url_for('login'))
+        edit_time = datetime.utcnow()
+        user_id = session['user_id']
+        # print(mater_id,tag,content,edit_time,user_id)
+        if mater_id:
+            material = Material.query.filter(Material.mater_id==int(mater_id),Material.user_id==session['user_id'])
+            material.tag = tag
+            material.content = content
+            material.edit_time = edit_time
+            db.session.commit()
+        else:
+            material = Material(tag=tag,content=content,user_id=user_id,edit_time=edit_time)
+            db.session.add(material)
+            db.session.commit()
+
+        # return u"提交成功"
+        return redirect(url_for('material_list'))
 
 @app.route('/material_list', methods=['GET'])
 def material_list():
-    title = request.args.get("title")
-    if title == None:
-        # material = Material.query.filter()
+    mater_id = request.args.get("mater_id")
+    tag = request.args.get("tag")
+    # 标签唯一问题
+    tag_all = Material.query.with_entities(Material.tag.distinct().label("tag")).filter(Material.user_id==session['user_id'])
+    # return str(tag_all)
+    if mater_id:
+        materials = Material.query.filter(Material.mater_id==int(mater_id),Material.user_id==session['user_id'])
+        return render_template("material_list.html",materials=materials,tags=tag_all)
+    elif tag:
+        materials = Material.query.filter(Material.tag==tag,Material.user_id==session['user_id'])
+        return render_template("material_list.html",materials=materials,tags=tag_all)
     else:
-        
+        materials = Material.query.filter(Material.user_id==session['user_id'])
+        return render_template("material_list.html",materials=materials,tags=tag_all)
+
 
 @app.route('/article_edit', methods=['GET','POST'])
 def article_edit():
     if request.method == 'GET':
-        return render_template('article_edit.html')
+        artic_id = request.args.get('artic_id')
+        tag_all = Material.query.with_entities(Material.tag.distinct().label("tag")).filter(Material.user_id==session['user_id'])
+        if artic_id:
+            article = Article.query.filter(Article.mater_id==int(artic_id),Article.user_id==session['user_id']).first()
+            # return str(Material.query.filter(Material.mater_id==mater_id,Material.user_id==session['user_id']))
+            return render_template('article_edit.html', article=article,tags=tag_all)
+        else:
+            return render_template('article_edit.html',tags=tag_all)
     else:
-        return u"正在提交"
+        artic_id = request.form['artic_id']
+        title = request.form['title']
+        content = request.form['content']
+        edit_time = datetime.utcnow()
+        user_id = session['user_id']
+        # print(mater_id,title,content,edit_time,user_id)
+        if artic_id:
+            article = Article.query.filter(Article.mater_id==int(artic_id),Article.user_id==session['user_id'])
+            article.title = title
+            article.content = content
+            article.edit_time = edit_time
+            db.session.commit()
+        else:
+            article = Article(title=title,content=content,user_id=user_id,edit_time=edit_time)
+            db.session.add(article)
+            db.session.commit()
+
+        # return u"提交成功"
+        return redirect(url_for('article_list'))
+
+@app.route('/article_list', methods=['GET'])
+def article_list():
+    artic_id = request.args.get("artic_id")
+    title = request.args.get("title")
+    tag_all = Material.query.with_entities(Material.tag.distinct().label("tag")).filter(Material.user_id==session['user_id'])
+
+    if artic_id:
+        articles = Article.query.filter(Article.artic_id==int(artic_id),Article.user_id==session['user_id'])
+        return render_template("article_list.html",articles=articles,tags=tag_all)
+    elif title:
+        articles = Article.query.filter(Article.title==title,Article.user_id==session['user_id'])
+        return render_template("article_list.html",articles=articles,tags=tag_all)
+    else:
+        articles = Article.query.filter(Article.user_id==session['user_id'])
+        return render_template("article_list.html",articles=articles,tags=tag_all)
 
 @app.context_processor
 def my_context_processor():
