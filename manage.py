@@ -21,4 +21,4 @@ from models import User
 # manager.add_command('db',MigrateCommand)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=4998)
