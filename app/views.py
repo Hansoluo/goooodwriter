@@ -80,7 +80,7 @@ def get_material():
         materials = Material.query.filter(Material.tag.like(f"%{tag}%"),Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
     else:
         materials = Material.query.filter(Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
-    
+
     return render_template('get_material.html',materials=materials)
 
 @app.route('/material_edit', methods=['GET','POST'])
