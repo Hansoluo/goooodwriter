@@ -9,6 +9,7 @@ from sqlalchemy import desc
 from sqlalchemy.sql import text
 import re
 
+
 @app.route('/')
 def about():
     """首页"""
@@ -82,7 +83,7 @@ def get_material():
         materials = Material.query.filter(Material.tag.like(f"%{tag}%"),Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
     else:
         materials = Material.query.filter(Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
-    print(materials)
+    # print(materials)
     return render_template('get_material.html',materials=materials)
 
 @app.route('/material', methods=['GET'])
